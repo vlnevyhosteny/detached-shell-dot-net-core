@@ -6,4 +6,15 @@
     <RootNamespace>detached_shell_dot_net_core</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Include="../dummy-script.sh" Link="dummy-script.sh" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../dummy-script.ps1" Link="dummy-script.ps1" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Microsoft.PowerShell.SDK" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.1.5" />
+  </ItemGroup>
 </Project>

@@ -1,4 +1,5 @@
-﻿# Just basic shell script that prints some output and wait between prints
+﻿#!/bin/bash
+# Just basic shell script that prints some output and wait between prints
 echo 'Hello, World!'
 
 sleep 1
