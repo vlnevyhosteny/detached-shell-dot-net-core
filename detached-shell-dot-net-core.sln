@@ -6,10 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "detached-shell-dot-net-core", "detached-shell-dot-net-core\detached-shell-dot-net-core.csproj", "{8852144C-2473-4FBD-BDD5-CD12097FA522}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E19367E6-8D04-45FC-9070-B1F1088002B2}"
-	ProjectSection(SolutionItems) = preProject
-		dummy-script.ps1 = dummy-script.ps1
-		dummy-script.sh = dummy-script.sh
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

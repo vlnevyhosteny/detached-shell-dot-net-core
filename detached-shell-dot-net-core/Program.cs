@@ -6,21 +6,11 @@ namespace detached_shell_dot_net_core
 {
     class Program
     {
-        private static readonly string successfullPoint = "successfull";
-
-        private static bool processReachSuccessfullPoint = false;
-
         static async Task Main(string[] args)
         {
-            bool runPowershell = false;
+            string programPath = "sh";
 
-            string programPath = runPowershell ?
-                "powershell.exe" :
-                "sh";
-
-            string scriptPath = runPowershell ?
-                "./dummy-script.ps1" :
-                "-c ./dummy-script.sh";
+            string scriptPath = "-c ./successfull-script.sh";
 
             ProcessStartInfo processInfo = new ProcessStartInfo(programPath, scriptPath);
 
@@ -29,54 +19,13 @@ namespace detached_shell_dot_net_core
             processInfo.RedirectStandardOutput = true;
             processInfo.RedirectStandardError = true;
 
-            using (var process = new Process
-            {
-                StartInfo = processInfo,
-                EnableRaisingEvents = true
-            })
-            {
-                await RunProcessAsync(process).ConfigureAwait(false);
-            }
+            var runner = new ProcessKeepingAliveRunner(processInfo, "Successfull");
 
-            Console.WriteLine("End");
-        }
+            var result = await runner.WaitForEventThanKeepAlive(50000);
 
-        private static Task<int> RunProcessAsync(Process process)
-        {
-            var tcs = new TaskCompletionSource<int>();
+            Console.Write(String.Join('\n', result.Output));
 
-            process.Exited += (s, ea) => tcs.SetResult(process.ExitCode);
-            process.OutputDataReceived += Process_OutputDataReceived;
-            process.ErrorDataReceived += Process_ErrorDataReceived;
-
-            bool started = process.Start();
-            if (!started)
-            {
-                throw new InvalidOperationException("Could not start process: " + process);
-            }
-
-            process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
-
-            return tcs.Task;
-        }
-
-        private static void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            if (e.Data != "")
-            {
-                Console.WriteLine("ERR: " + e.Data);
-            }
-        }
-
-        private static void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            Console.WriteLine(e.Data);
-
-            if (e.Data == successfullPoint)
-            {
-                processReachSuccessfullPoint = true;
-            }
+            runner.KillAndDisposeProcess();
         }
     }
 }

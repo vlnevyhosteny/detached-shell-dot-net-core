@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="../dummy-script.sh" Link="dummy-script.sh" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="../dummy-script.ps1" Link="dummy-script.ps1" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../successfull-script.sh" Link="successfull-script.sh" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../unsuccessfull-script.sh" Link="unsuccessfull-script.sh" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
