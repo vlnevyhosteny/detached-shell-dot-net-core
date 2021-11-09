@@ -73,6 +73,7 @@ namespace detached_shell_dot_net_core
             }
 
             this.process.BeginOutputReadLine();
+            //this.process.BeginErrorReadLine();
 
             var processed = await this.semaphore.WaitAsync(milisecondsTimeout);
             if (!processed)
@@ -84,6 +85,17 @@ namespace detached_shell_dot_net_core
             {
                 Output = this.processOutput.ToArray(),
             };
+        }
+
+        public void KillAndDisposeProcess()
+        {
+            if (this.process == null)
+            {
+                throw new ProcessKeepingAliveRunnerException("No processing running");
+            }
+
+            this.process.Kill();
+            this.process.Dispose();
         }
 
         private void Process_Exited(object sender, EventArgs e)
@@ -104,17 +116,6 @@ namespace detached_shell_dot_net_core
             throw new ProcessException(e.Data, this.processOutput.ToArray());
         }
 
-        public void KillAndDisposeProcess()
-        {
-            if (this.process == null)
-            {
-                throw new ProcessKeepingAliveRunnerException("No processing running");
-            }
-
-            this.process.Kill();
-            this.process.Dispose();
-        }
-
         private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
             if (e.Data == null)
@@ -124,10 +125,11 @@ namespace detached_shell_dot_net_core
 
             this.processOutput.Add(e.Data);
 
+            // Here is matching the event done
             if (e.Data == this.outputEvent)
             {
                 this.semaphore.Release();
-                this.process.CancelOutputRead();
+                this.process.CancelOutputRead(); // optional, otherwise it will still write output into memory
             }
         }
 
